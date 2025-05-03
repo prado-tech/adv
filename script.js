@@ -110,4 +110,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Executa uma vez ao carregar
     animateOnScroll();
     
+    // Carrossel de depoimentos
+let currentTestimonial = 0;
+const testimonials = document.querySelectorAll('.testimonial-card');
+const totalTestimonials = testimonials.length;
+
+function showTestimonial(index) {
+    testimonials.forEach((testimonial, i) => {
+        testimonial.style.display = i === index ? 'block' : 'none';
+    });
+}
+
+// Botões de navegação (adicione no HTML)
+document.querySelector('.testimonial-prev').addEventListener('click', () => {
+    currentTestimonial = (currentTestimonial - 1 + totalTestimonials) % totalTestimonials;
+    showTestimonial(currentTestimonial);
+});
+
+document.querySelector('.testimonial-next').addEventListener('click', () => {
+    currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+    showTestimonial(currentTestimonial);
+});
+
+// Inicializar
+showTestimonial(0);
+
 });
