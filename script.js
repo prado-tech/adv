@@ -4,6 +4,19 @@ document.addEventListener('DOMContentLoaded', function() {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
             
+            const targetId = this.getAttribute('href');
+            const target = document.querySelector(targetId);
+
+            if(target) {
+                // Corrigindo a rolagem suave com base na altura do cabeçalho fixo
+                const headerHeight = document.querySelector('.main-header').offsetHeight;
+                
+                window.scrollTo({
+                    top: target.offsetTop - headerHeight, // Ajusta a posição levando em conta o cabeçalho fixo
+                    behavior: 'smooth' // Rolagem suave
+                });
+            }
+
             // Remove classe active de todos os links
             document.querySelectorAll('.nav-link').forEach(item => {
                 item.classList.remove('active');
@@ -13,28 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if(this.classList.contains('nav-link')) {
                 this.classList.add('active');
             }
-            
-            // Obtém o alvo do link
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            // Animação de scroll
-            if(targetElement) {
-                const headerHeight = document.querySelector('.main-header').offsetHeight;
-                const targetPosition = targetElement.offsetTop - headerHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
         });
     });
     
     // ============ ANIMAÇÕES AO ROLAR A PÁGINA ============
     const animateOnScroll = function() {
         const elements = document.querySelectorAll(
-            '.hero-text, .about-content > div, .services-list li, .portfolio-item'
+            '.hero-text, .about-content > div, .services-list li, .portfolio-item, .contact-item'
         );
         
         elements.forEach(element => {
@@ -54,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Adiciona estilos iniciais para animação
     const animatedElements = document.querySelectorAll(
-        '.hero-text, .about-content > div, .services-list li, .portfolio-item'
+        '.hero-text, .about-content > div, .services-list li, .portfolio-item, .contact-item'
     );
     
     animatedElements.forEach((element, index) => {
@@ -109,30 +107,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Executa uma vez ao carregar
     animateOnScroll();
-    
+
     // Carrossel de depoimentos
-let currentTestimonial = 0;
-const testimonials = document.querySelectorAll('.testimonial-card');
-const totalTestimonials = testimonials.length;
+    let currentTestimonial = 0;
+    const testimonials = document.querySelectorAll('.testimonial-card');
+    const totalTestimonials = testimonials.length;
 
-function showTestimonial(index) {
-    testimonials.forEach((testimonial, i) => {
-        testimonial.style.display = i === index ? 'block' : 'none';
+    function showTestimonial(index) {
+        testimonials.forEach((testimonial, i) => {
+            testimonial.style.display = i === index ? 'block' : 'none';
+        });
+    }
+
+    // Botões de navegação (adicione no HTML)
+    document.querySelector('.testimonial-prev').addEventListener('click', () => {
+        currentTestimonial = (currentTestimonial - 1 + totalTestimonials) % totalTestimonials;
+        showTestimonial(currentTestimonial);
     });
-}
 
-// Botões de navegação (adicione no HTML)
-document.querySelector('.testimonial-prev').addEventListener('click', () => {
-    currentTestimonial = (currentTestimonial - 1 + totalTestimonials) % totalTestimonials;
-    showTestimonial(currentTestimonial);
-});
+    document.querySelector('.testimonial-next').addEventListener('click', () => {
+        currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
+        showTestimonial(currentTestimonial);
+    });
 
-document.querySelector('.testimonial-next').addEventListener('click', () => {
-    currentTestimonial = (currentTestimonial + 1) % totalTestimonials;
-    showTestimonial(currentTestimonial);
-});
-
-// Inicializar
-showTestimonial(0);
-
+    // Inicializar
+    showTestimonial(0);
 });
